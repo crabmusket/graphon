@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="d3.v2.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<style type="text/css">
+.link {
+	stroke: #ccc;
+}
+
+textarea:focus, input:focus {
+    outline: none;
+}
+
+.nodetext {
+	pointer-events: none;
+	font: 10px sans-serif;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+}
+
+.console {
+	position: fixed;
+	left: 5px;
+	top: 5px;
+}
+
+#console {
+	border: none;
+	font-family: Courier;
+}
+
+.selected {
+	background-color: red;
+}
+		</style>
+	</head>
+	<body>
+		<div class="console">
+			<span style="font-family: Courier;">&gt;</span>
+			<input type="text" id="console"></input>
+		</div>
+		<script type="text/javascript" src="graphon.js"></script>
+	</body>
+</html>
