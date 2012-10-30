@@ -52,10 +52,17 @@ function restart() {
 }
 
 function addNode(name) {
+  if(!name.length)
+    return;
   nodes.push({
     name: name,
   });
-  if (nodes.length > 1 && false) {
+}
+
+function addNodes(names) {
+  names = names.split(" ");
+  for (var i = 0; i < names.length; i++) {
+    addNode(names[i]);
   }
   restart();
 }
@@ -84,7 +91,6 @@ function addEdge(from, to) {
     source: fnode,
     target: tnode,
   });
-  restart();
 }
 
 function addEdges(froms, tos) {
@@ -93,17 +99,10 @@ function addEdges(froms, tos) {
       addEdge(froms[i], tos[j]);
     }
   }
+  restart();
 }
 
 restart();
-
-$(window).resize(function() {
-  force.size([
-    $(window).width(),
-    $(window).height()
-  ]);
-  force.start();
-});
 
 $('#console').keyup(function(event) {
   var self = $(this);
@@ -116,12 +115,20 @@ $('#console').keyup(function(event) {
     // ENTER pressed: perform action
     if (self.val().indexOf("->") != -1) {
       var groups = text.split("->");
+      for (var g = 0; g < groups.length; g++) {
+        var items = groups[g].split(" ");
+        groups[g] = [];
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].length)
+            groups[g].push(items[i]);
+        }
+      }
       for (var g = 0; g < groups.length - 1; g++) {
         addEdges(groups[g], groups[g+1]);
       }
     }
     else {
-      addNode(self.val());
+      addNodes(self.val());
     }
     self.val("");
   } else {
@@ -132,4 +139,12 @@ $('#console').focus();
 
 $('body').click(function() {
   $('#console').focus();
+});
+
+$(window).resize(function() {
+  force.size([
+    $(window).width(),
+    $(window).height()
+  ]);
+  force.start();
 });
