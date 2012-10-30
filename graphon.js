@@ -56,12 +56,43 @@ function addNode(name) {
     name: name,
   });
   if (nodes.length > 1 && false) {
-    links.push({
-      source: nodes[nodes.length - 1],
-      target: nodes[nodes.length - 2],
-    });
   }
   restart();
+}
+
+function addEdge(from, to) {
+  var fnode = null, tnode = null;
+  for (var i = 0; i < nodes.length; i++) {
+    if (nodes[i].name == from)
+      fnode = nodes[i];
+    if (nodes[i].name == to)
+      tnode = nodes[i];
+  }
+  if (!fnode) {
+    fnode = {
+      name: from
+    };
+    nodes.push(fnode);
+  }
+  if (!tnode) {
+    tnode = {
+      name: to
+    };
+    nodes.push(tnode);
+  }
+  links.push({
+    source: fnode,
+    target: tnode,
+  });
+  restart();
+}
+
+function addEdges(froms, tos) {
+  for (var i = 0; i < froms.length; i++) {
+    for (var j = 0; j < tos.length; j++) {
+      addEdge(froms[i], tos[j]);
+    }
+  }
 }
 
 restart();
@@ -76,19 +107,21 @@ $(window).resize(function() {
 
 $('#console').keyup(function(event) {
   var self = $(this);
+  var text = self.val();
   var tokens = self.val().split(" ");
+  // If line is empty, nothing to do
   if (!tokens.length)
     return;
   if (event.which == 13) {
-    switch (tokens[0]) {
-      case 'n':
-      case 'node':
-        if (tokens.length < 2)
-          break;
-        for (var i = 1; i < tokens.length; i++) {
-          addNode(tokens[i]);
-        }
-        break;
+    // ENTER pressed: perform action
+    if (self.val().indexOf("->") != -1) {
+      var groups = text.split("->");
+      for (var g = 0; g < groups.length - 1; g++) {
+        addEdges(groups[g], groups[g+1]);
+      }
+    }
+    else {
+      addNode(self.val());
     }
     self.val("");
   } else {
