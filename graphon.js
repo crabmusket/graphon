@@ -136,8 +136,8 @@ $('#console').keyup(function(event) {
     var texts = d3.selectAll("text.nodetext");
     texts.attr("fill", "#000000");
     texts.filter(function(d, i) {
-      var r = new RegExp(self.val());
-      return r.test(d.name);
+      var r = new RegExp('^' + self.val());
+      return self.val().length && r.test(d.name);
     }).attr("fill", "#ff0000");;
   }
 });
